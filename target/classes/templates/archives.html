@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>歸類</title>
+    <link th:replace= "_fragments :: link">
+</head>
+
+<body>
+    <!-- 導覽 -->
+    <nav th:replace="_fragments :: menu(4)" class="ui inverted  attached segment m-padded-tb-mini m-shadow-small">
+        <div class="ui container">
+            <div class="ui inverted secondary stackable menu">
+                <h2 class="ui teal header item">Blog</h2>
+                <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>首頁</a>
+                <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分類</a>
+                <a href="#" class="m-item item m-mobile-hide"><i class="tags icon"></i>標籤</a>
+                <a href="#" class="active m-item item m-mobile-hide"><i class="clone icon"></i>歸檔</a>
+                <a href="#" class="m-item item m-mobile-hide"><i class="info icon"></i>關於我</a>
+                <div class="right m-item  item m-mobile-hide">
+                    <div class="ui icon input inverted transparent">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="ui menu toggle black icon botton m-top-right m-moblie-show">
+            <i class="sidebar icon"></i>
+        </a>
+    </nav>
+
+    <!-- 中間內容 -->
+    <div class="m-padded-tb-big m-container-small">
+        <div class="ui container">
+            <!-- header -->
+            <div class="ui top attached padded segment">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                        <h3 class="ui teal header">歸類</h3>
+                    </div>
+                    <div class="right aligned column">
+                        共<h2 class="ui orange header m-inline-block m-text-thin" th:text="${blogCount}">14</h2>篇博客
+                    </div>
+                </div>
+            </div>
+
+            <th:block th:each="item : ${archiveMap}">
+                <h3 class="ui center aligned header" th:text="${item.key}">2020</h3>
+                <div class="ui fluid vertical menu">
+                    <a href="#"  th:href="@{/blog/{id}(id=${blog.id})}" class="item" target="_blank" th:each="blog : ${item.value}">
+                    <span>
+                        <i class="mini teal circle icon"></i><span th:text="${blog.title}">超速學習</span>
+                        <div class="ui teal basic left pointing label m-padded-tb-mini" th:text="${#dates.format(blog.updateTime, 'MMMdd')}">12月25</div>
+                    </span>
+                        <div class="ui orange basic left pointing label m-padded-tb-mini" th:text="${blog.flag}">轉載</div>
+                    </a>
+
+                </div>
+            </th:block>
+
+
+    </div>
+    <br>
+    <br>
+
+    <!-- 底部 -->
+    <footer th:replace="_fragments :: footer"></footer>
+    <script th:replace="_fragments :: script"></script>
+
+    <script>
+        $('.menu.toggle').click(function () {
+            $('.m-item').toggleClass('m-mobile-hide');
+        });
+
+    </script>
+</body>
+
+</html>

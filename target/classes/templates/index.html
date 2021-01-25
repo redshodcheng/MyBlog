@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>媽媽扎摳</title>
+    <link th:replace= "_fragments :: link">
+</head>
+
+<body>
+    <!-- 導覽 -->
+    <nav th:replace="_fragments :: menu(1)">
+
+    </nav>
+
+    <!-- 中間內容 -->
+    <div class="m-padded-tb-big m-container">
+        <div class="ui container">
+            <div class="ui stackable grid">
+                <div class="eleven wide column">
+                    <!-- header -->
+                    <div class="ui top attached segment">
+                        <div class="ui middle aligned two column grid">
+                            <div class="column">
+                                <h3 class="ui teal header">部落格</h3>
+                            </div>
+                            <div class="right aligned column">
+                                共<h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}">14</h2>篇
+                            </div>
+                        </div>
+                    </div>
+                    <!-- content -->
+                    <div class="ui attached segment">
+                        <!-- 文章內容 -->
+                        <div class="ui padded vertical segment m-padded-tb-large"  th:each="blog : ${page.content}">
+                            <div class="ui  middle aligned mobile reversed stackable grid">
+                                <!-- 左邊內容 -->
+                                <div class="ui eleven wide column">
+                                    <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="m-black" th:text="${blog.title}">有個性的柴犬</a></h3>
+                                    <p class="m-text" th:text="|${blog.description}......|">柴犬天性較為大膽、獨立，同時也有頑固一面</p>
+                                    <div class="ui grid">
+                                        <div class="eleven wide column">
+                                            <div class="ui mini horizontal link list">
+                                                <div class="item">
+                                                    <img src="https://img.ruten.com.tw/s2/7/3c/08/21746337018888_490.jpg"
+                                                       th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image">
+                                                    <div class="content">
+                                                        <a href="#" class="header" th:text="${blog.user.nickname}">札摳</a>
+                                                    </div>
+                                                </div>
+                                                <div class="item">
+                                                    <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2020-12-22</span>
+                                                </div>
+                                                <div class="item">
+                                                    <i class="eye icon"></i><span th:text="${blog.views}">1234</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="right aligned five wide column">
+                                            <a href="#" target="_blank"
+                                                class="ui teal basic label m-padded-tiny m-text-thin" th:text="${blog.type.name}">認知升級</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui five wide column">
+                                    <a href="#" th:href="@{/blog/{id}(id=${blog.id})}">
+                                        <img src="https://img.ruten.com.tw/s2/7/3c/08/21746337018888_490.jpg" th:src="@{${blog.firstPicture}}" alt=""
+                                            class="ui rounded image">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- footer -->
+                    <div class="ui bottom attached segment" th:if="${page.totalPages}>1" >
+                        <div class="ui middle aligned two column grid">
+                            <div class="column">
+                                <a href="#" th:href="@{/(page=${page.number}-1)}" th:unless="${page.first}" class="ui mini teal basic button">上一頁</a>
+                            </div>
+                            <div class="right aligned column">
+                                <a href="#" th:href="@{/(page=${page.number}+1)}" th:unless="${page.last}" class="ui mini teal basic button">下一頁</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 右邊Top內容 -->
+                <div class="five wide column">
+                    <!-- 分類 -->
+                    <div class="ui segments">
+                        <div class="ui secondary segment">
+                            <div class="ui two column grid">
+                                <div class="column">
+                                    <i class="idea icon"></i>分類
+                                </div>
+                                <div class="right aligned column">
+                                    <a href="#" target="_blank" th:href="@{types/-1}">more <i class="angle double right icon"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui teal segment">
+                            <div class="ui fluid vertical menu">
+                                <a href="#" th:href="@{/types/{id}(id=${type.id})}" class="item" th:each="type : ${types}">
+                                    <span th:text="${type.name}">學習日誌</span>
+                                    <div class="ui teal left pointing basic label" th:text="${#arrays.length(type.blogs)}">13</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 標籤 -->
+                    <div class="ui segments m-margin-top-large">
+                        <div class="ui secondary segment">
+                            <div class="ui two column grid">
+                                <div class="column">
+                                    <i class="tags icon"></i>標籤
+                                </div>
+                                <div class="right aligned column">
+                                    <a href="#" target="_blank" th:href="@{tags/-1}">more <i class="angle double right icon"></i></a>
+                                </div>
+                            </div>
+                            <div class="ui teal segment">
+                                <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" target="_blank" class="ui teal basic left pointing label m-margin-tb-tiny" th:each="tag : ${tags}">
+                                 <span th:text="${tag.name}">方法論</span> <div class="detail" th:text="${#arrays.length(tag.blogs)}">5</div>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 最新推薦 -->
+                    <div class="ui segments m-margin-top-large">
+                        <div class="ui secondary segment">           
+                            <i class="bookmark icon"></i>最新推薦            
+                        </div>           
+                        <div class="ui segment" th:each="blog : ${recommendBlogs}">
+                            <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="m-black m-text-thin" th:text="${blog.title}">用戶故事(User Story)</a>
+                        </div>
+
+                    </div>
+                    <!-- QR_CODE -->
+                    <h4 class="ui horizontal divider header m-margin-top-large">QR_CODE</h4>
+                    <div class="ui centered card" style="width: 10em;">
+                        <img src="./static/images/Line_QR_Code.jpg" th:src="@{/images/Line_QR_Code.jpg}" alt="" class="ui rounded image">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br>
+        <br>
+
+    </div>
+
+
+    <!-- 底部 -->
+    <footer th:replace="_fragments :: footer"></footer>
+
+    <script th:replace="_fragments :: script"></script>
+
+
+    <script>
+        $('.menu.toggle').click(function(){
+            $('.m-item').toggleClass('m-mobile-hide');
+        });
+    </script>
+</body>
+
+</html>
